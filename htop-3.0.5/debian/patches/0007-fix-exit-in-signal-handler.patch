@@ -1,0 +1,21 @@
+Backport of bd694c0ce60a60e29dc4ae22923f251fbd196332
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Fri, 29 Jan 2021 12:38:30 +0100
+Subject: [PATCH] Do not call exit(3) in signal handler
+
+Call safe _exit(2) instead
+---
+ CRT.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/CRT.c
++++ b/CRT.c
+@@ -621,7 +621,7 @@
+ static void CRT_handleSIGTERM(int sgn) {
+    (void) sgn;
+    CRT_done();
+-   exit(0);
++   _exit(0);
+ }
+ 
+ #ifdef HAVE_SETUID_ENABLED

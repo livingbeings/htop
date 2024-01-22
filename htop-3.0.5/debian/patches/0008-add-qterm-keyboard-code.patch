@@ -1,0 +1,13 @@
+Partial backport of 06b5828dc4649bc23197712fe17b2d4e8d0adbbe
+
+Fix QTerminal keycode for Shift-F3 (previous in search)
+--- a/CRT.c
++++ b/CRT.c
+@@ -698,6 +698,7 @@
+       define_key("\033OQ", KEY_F(2));
+       define_key("\033OR", KEY_F(3));
+       define_key("\033OS", KEY_F(4));
++      define_key("\033O2R", KEY_F(15));
+       define_key("\033[11~", KEY_F(1));
+       define_key("\033[12~", KEY_F(2));
+       define_key("\033[13~", KEY_F(3));

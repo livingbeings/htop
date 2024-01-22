@@ -1,0 +1,25 @@
+From 099dab88be5a7a1c9207e7bc7116618b7108f851 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Thu, 22 Apr 2021 17:12:02 +0200
+Subject: [PATCH] ZfsCompressedArcMeter: avoid division by 0
+
+On systems not using ZFS `this->values[0]` is zero.
+---
+ zfs/ZfsCompressedArcMeter.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+--- a/zfs/ZfsCompressedArcMeter.c
++++ b/zfs/ZfsCompressedArcMeter.c
+@@ -33,7 +33,11 @@
+ }
+ 
+ static void ZfsCompressedArcMeter_printRatioString(const Meter* this, char* buffer, size_t size) {
+-   xSnprintf(buffer, size, "%.2f:1", this->total / this->values[0]);
++   if (this->values[0] > 0) {
++      xSnprintf(buffer, size, "%.2f:1", this->total / this->values[0]);
++   } else {
++      xSnprintf(buffer, size, "N/A");
++   }
+ }
+ 
+ static void ZfsCompressedArcMeter_updateValues(Meter* this, char* buffer, size_t size) {

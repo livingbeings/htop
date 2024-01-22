@@ -1,0 +1,22 @@
+From e86acd6893c17165b8b889bea122a283b9c09fe7 Mon Sep 17 00:00:00 2001
+From: Daniel Lange <DLange@git.local>
+Date: Sun, 7 Feb 2021 13:46:57 +0100
+Subject: [PATCH] Remove force sort order to ASC when returning to tree mode
+
+Bug found by BenBE via IRC
+---
+ Action.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+--- a/Action.c
++++ b/Action.c
+@@ -227,9 +227,6 @@
+ 
+ static Htop_Reaction actionToggleTreeView(State* st) {
+    st->settings->treeView = !st->settings->treeView;
+-   if (st->settings->treeView) {
+-      st->settings->treeDirection = 1;
+-   }
+ 
+    ProcessList_expandTree(st->pl);
+    return HTOP_REFRESH | HTOP_SAVE_SETTINGS | HTOP_KEEP_FOLLOWING | HTOP_REDRAW_BAR | HTOP_UPDATE_PANELHDR;

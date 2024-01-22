@@ -1,0 +1,87 @@
+Backport of upstream 5fde0e012762b07e4955306b743afcf43fe237c6
+
+Allows to set attributes when padding process fields in non-wide ncurses mode.
+
+--- a/Meter.c
++++ b/Meter.c
+@@ -202,7 +202,7 @@
+    // The text in the bar is right aligned;
+    // Pad with maximal spaces and then calculate needed starting position offset
+    RichString_begin(bar);
+-   RichString_appendChr(&bar, ' ', w);
++   RichString_appendChr(&bar, 0, ' ', w);
+    RichString_appendWide(&bar, 0, buffer);
+    int startPos = RichString_sizeVal(bar) - w;
+    if (startPos > w) {
+--- a/Process.c
++++ b/Process.c
+@@ -246,7 +246,7 @@
+ 
+ void Process_printLeftAlignedField(RichString* str, int attr, const char* content, unsigned int width) {
+    int c = RichString_appendnWide(str, attr, content, MINIMUM(width, strlen(content)));
+-   RichString_appendChr(str, ' ', width + 1 - c);
++   RichString_appendChr(str, attr, ' ', width + 1 - c);
+ }
+ 
+ void Process_writeField(const Process* this, RichString* str, ProcessField field) {
+--- a/RichString.c
++++ b/RichString.c
+@@ -80,6 +80,15 @@
+    }
+ }
+ 
++void RichString_appendChr(RichString* this, int attrs, char c, int count) {
++   int from = this->chlen;
++   int newLen = from + count;
++   RichString_setLen(this, newLen);
++   for (int i = from; i < newLen; i++) {
++      this->chptr[i] = (CharType) { .attr = attrs, .chars = { c, 0 } };
++   }
++}
++
+ int RichString_findChar(RichString* this, char c, int start) {
+    wchar_t wc = btowc(c);
+    cchar_t* ch = this->chptr + start;
+@@ -115,6 +124,15 @@
+    }
+ }
+ 
++void RichString_appendChr(RichString* this, int attrs, char c, int count) {
++   int from = this->chlen;
++   int newLen = from + count;
++   RichString_setLen(this, newLen);
++   for (int i = from; i < newLen; i++) {
++      this->chptr[i] = c | attrs;
++   }
++}
++
+ int RichString_findChar(RichString* this, char c, int start) {
+    chtype* ch = this->chptr + start;
+    for (int i = start; i < this->chlen; i++) {
+@@ -134,15 +152,6 @@
+    this->chptr = this->chstr;
+ }
+ 
+-void RichString_appendChr(RichString* this, char c, int count) {
+-   int from = this->chlen;
+-   int newLen = from + count;
+-   RichString_setLen(this, newLen);
+-   for (int i = from; i < newLen; i++) {
+-      RichString_setChar(this, i, c);
+-   }
+-}
+-
+ void RichString_setAttr(RichString* this, int attrs) {
+    RichString_setAttrn(this, attrs, 0, this->chlen);
+ }
+--- a/RichString.h
++++ b/RichString.h
+@@ -50,7 +50,7 @@
+ 
+ void RichString_setAttr(RichString* this, int attrs);
+ 
+-void RichString_appendChr(RichString* this, char c, int count);
++void RichString_appendChr(RichString* this, int attrs, char c, int count);
+ 
+ int RichString_appendWide(RichString* this, int attrs, const char* data);
+ 

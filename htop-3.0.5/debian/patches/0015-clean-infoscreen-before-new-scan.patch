@@ -1,0 +1,35 @@
+From d8d83031d9d42d64e89388c842056031c6dad27c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=98ystein=20Hi=C3=A5sen?= <oystein.hiaasen@gmail.com>
+Date: Mon, 15 Feb 2021 20:32:01 +0100
+Subject: [PATCH] InfoScreen: Remove old lines before scanning again
+
+---
+ InfoScreen.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+--- a/InfoScreen.c
++++ b/InfoScreen.c
+@@ -145,8 +145,10 @@
+          break;
+       case KEY_F(5):
+          clear();
+-         if (As_InfoScreen(this)->scan)
++         if (As_InfoScreen(this)->scan) {
++            Vector_prune(this->lines);
+             InfoScreen_scan(this);
++         }
+ 
+          InfoScreen_draw(this);
+          break;
+@@ -161,8 +163,10 @@
+          break;
+       case KEY_RESIZE:
+          Panel_resize(panel, COLS, LINES - 2);
+-         if (As_InfoScreen(this)->scan)
++         if (As_InfoScreen(this)->scan) {
++            Vector_prune(this->lines);
+             InfoScreen_scan(this);
++         }
+ 
+          InfoScreen_draw(this);
+          break;

@@ -1,0 +1,18 @@
+Backport of commit 12208af7773775bf637ee2f8a07fdd6300238fc1
+Author: Benny Baumann <BenBE@geshi.org>
+Date:   Mon Feb 1 22:09:39 2021 +0100
+
+    DiD: Avoid negative cmdlineBasenameOffset
+
+--- a/linux/LinuxProcess.c
++++ b/linux/LinuxProcess.c
+@@ -202,6 +202,9 @@
+    size_t tokenLen;
+    const size_t commLen = strlen(comm);
+ 
++   if (cmdlineBasenameOffset < 0)
++      return false;
++
+    for (const char *token = cmdline + cmdlineBasenameOffset; *token; ) {
+       for (tokenBase = token; *token && *token != '\n'; ++token) {
+          if (*token == '/') {

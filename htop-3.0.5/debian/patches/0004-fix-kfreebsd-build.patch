@@ -1,0 +1,25 @@
+Backport of upstream commits 47cebaf and 78b993d
+
+Fix kfreeBSD build warnings
+--- a/freebsd/FreeBSDProcessList.c
++++ b/freebsd/FreeBSDProcessList.c
+@@ -5,6 +5,8 @@
+ in the source distribution for its full text.
+ */
+ 
++#include "config.h" // IWYU pragma: keep
++
+ #include "FreeBSDProcessList.h"
+ 
+ #include <assert.h>
+--- a/freebsd/Platform.c
++++ b/freebsd/Platform.c
+@@ -5,6 +5,8 @@
+ in the source distribution for its full text.
+ */
+ 
++#include "config.h" // IWYU pragma: keep
++
+ #include "Platform.h"
+ 
+ #include <devstat.h>

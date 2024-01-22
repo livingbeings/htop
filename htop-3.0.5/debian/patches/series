@@ -1,0 +1,17 @@
+0001-reset-cached-values.patch
+0002-fix-ncurses-field-padding.patch
+0003-fix-hurd-build.patch
+0004-fix-kfreebsd-build.patch
+0005-fix-sorting.patch
+0006-fix-infoscreen-mouse.patch
+0007-fix-exit-in-signal-handler.patch
+0008-add-qterm-keyboard-code.patch
+0009-hardening.patch
+0010-fix-sort-timeout.patch
+0011-improve-setup-for-many-cpu-systems.patch
+0012-fix-forced-sort-order.patch
+0013-fix-btime-zero.patch
+0014-fix-zfs-coloring.patch
+0015-clean-infoscreen-before-new-scan.patch
+0016-fix-div-by-zero-zfscompressedarcmeter.patch
+"adding-testing.sh-for-test-purposes"
